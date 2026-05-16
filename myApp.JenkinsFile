@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Clone') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                // On nettoie les anciens conteneurs pour éviter les conflits de port
+                sh 'docker rm -f mon-app-cible || true'
+                // On build l'image locale
+                sh 'docker build -t mon-app-image:latest1 .'
+            }
+        }
+
+        stage('Deploy Local') {
+            steps {
+                // On lance l'application sur le port 8081 de ton PC
+                sh 'docker run -d -p 8081:8080 --name mon-app-cible mon-app-image:latest'
+                echo 'Application déployée avec succès !'
+            }
+        }
+    }
+}

@@ -1,0 +1,10 @@
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/')
+def hello_world():
+    return 'Mon application DevOps fonctionne sur le port 8081 !'
+
+if __name__ == '__main__':
+    # L'application écoute sur le port 8080 à l'intérieur du conteneur
+    app.run(host='0.0.0.0', port=8080)
