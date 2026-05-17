@@ -19,12 +19,29 @@ pipeline {
             }
         }
 
-        stage('Deploy Local') {
-            steps {
-                // On lance l'application sur le port 8081 de ton PC
-                sh 'docker run -d -p 8082:9090 --name mon-app-cible mon-appflask-image:latest1'
-                echo 'Application déployée avec succès !'
-            }
+        stage('Push to Docker Hub') {
+    steps {
+        // 1. Connexion sécurisée grâce à l'ID de tes credentials
+        withCredentials([usernamePassword(credentialsId: 'TknDckrHb', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_TOKEN')]) {
+            
+            // 2. Connexion au serveur Docker Hub
+            sh "echo ${DOCKER_TOKEN} | docker login -u ${DOCKER_USER} --password-stdin"
+            
+            // 3. Renommer l'image pour Docker Hub
+            sh "docker tag mon-app-flask:latest ${DOCKER_USER}/mon-app-flask:latest"
+            
+            // 4. Envoyer l'image sur ton compte en ligne
+            sh "docker push ${DOCKER_USER}/mon-app-flask:latest"
         }
+    }
+}
+
+        // stage('Deploy Local') {
+        //     steps {
+        //         // On lance l'application sur le port 8081 de ton PC
+        //         sh 'docker run -d -p 8082:9090 --name mon-app-cible mon-appflask-image:latest1'
+        //         echo 'Application déployée avec succès !'
+        //     }
+        // }
     }
 }
