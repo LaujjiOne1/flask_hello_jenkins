@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deployment
+  labels:
+    app: flask-app
+spec:
+  replicas: 2 # <-- Kubernetes va lancer 2 conteneurs identiques pour la haute disponibilité !
+  selector:
+    matchLabels:
+      app: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+    spec:
+      containers:
+        - name: flask-app-container
+          image: laujjione/mon-app-flask:latest # <-- TON IMAGE DOCKER HUB
+          imagePullPolicy: Always # Force K8s à re-télécharger l'image à chaque mise à jour
+          ports:
+            - containerPort: 5000 # Le port sur lequel ton Flask écoute à l'intérieur du conteneur
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-app-service
+spec:
+  type: NodePort # Permet d'exposer l'application sur un port de ton vrai PC Windows
+  selector:
+    app: flask-app
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30080 # <-- Tu pourras visiter ton site sur http://localhost:30080

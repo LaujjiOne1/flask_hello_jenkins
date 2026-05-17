@@ -32,5 +32,13 @@ pipeline {
                 }
             }
         } // Accolade de fermeture du stage corrigée !
+
+        stage('Deploy to Kubernetes') {
+            steps {
+                // Cette commande magique dit à Kubernetes d'appliquer notre fichier de configuration
+                sh 'kubectl apply -f deployment.yaml'
+                echo 'Application déployée sur Kubernetes avec succès !'
+            }
+        }
     }
 }
