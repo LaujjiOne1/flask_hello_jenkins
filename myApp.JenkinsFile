@@ -12,6 +12,8 @@ pipeline {
             steps {
                 // On nettoie les anciens conteneurs pour éviter les conflits de port
                 sh 'docker rm -f mon-app-cible || true'
+
+                sh 'ls -la' // Affiche les fichiers pour vérifier que nous sommes dans le bon répertoire
                 // On build l'image locale
                 sh 'docker build -t mon-appflask-image:latest1 .'
             }
