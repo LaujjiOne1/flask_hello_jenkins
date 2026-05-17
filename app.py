@@ -3,7 +3,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Mon application DevOps fonctionne sur le port 8081 et mise a jour !'
+    return 'Mon application DevOps fonctionne sur le port 8081 , TEST #4 !'
 
 if __name__ == '__main__':
     # L'application écoute sur le port 9090 à l'intérieur du conteneur
